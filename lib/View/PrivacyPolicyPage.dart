@@ -2,8 +2,8 @@ import 'package:bytesflare_infotech/widgets/footer.dart';
 import 'package:bytesflare_infotech/widgets/header.dart';
 import 'package:flutter/material.dart';
 
-class AboutUsPage extends StatelessWidget {
-  const AboutUsPage({super.key});
+class PrivacyPolicyPage extends StatelessWidget {
+  const PrivacyPolicyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AboutUsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "About Us",
+                  "Privacy Policy",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -32,86 +32,91 @@ class AboutUsPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Bytes Flare Infotech is a specialized IT agency dedicated to helping businesses succeed in the digital world. Since our inception, we have focused on delivering high-quality mobile apps, websites, and custom software solutions tailored to our clients' unique needs.",
+                  "Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you visit or use our services.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Our Mission",
+                  "Information Collection:",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Our mission is to empower businesses by providing innovative digital solutions that enhance customer engagement, streamline operations, and drive growth. We combine creativity with technology to deliver products that stand out in the market.",
+                  "We may collect personal information such as your name, email address, and any other details you provide when using our services or contacting us.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Our Vision",
+                  "Information Use:",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "We envision becoming a leading digital solutions provider known for transforming ideas into successful products. Our goal is to create long-term partnerships with businesses by consistently delivering exceptional results.",
+                  "The information collected is used to respond to your inquiries, improve our services, and provide a better user experience. We do not share your personal data with third parties without your consent.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Our Values",
+                  "Cookies and Tracking:",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "1. Quality: We are committed to delivering high-quality solutions that exceed client expectations.\n\n"
-                  "2. Innovation: We embrace new technologies and creative ideas to provide cutting-edge solutions.\n\n"
-                  "3. Integrity: We maintain transparency and honesty in all our client interactions.\n\n"
-                  "4. Collaboration: We work closely with clients, understanding their needs to achieve shared success.",
+                  "We may use cookies and similar technologies to analyze site usage and improve performance. You can manage your cookie preferences in your browser settings.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Our Expertise",
+                  "Data Security:",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "We specialize in:\n"
-                  "- Mobile App Development (Android & iOS)\n"
-                  "- Web Development & Design\n"
-                  "- Custom Software Solutions\n"
-                  "- E-Commerce Platforms\n"
-                  "- UI/UX Design & Animation\n"
-                  "- Cloud & Backend Integration",
+                  "We implement appropriate security measures to protect your personal information from unauthorized access, disclosure, or misuse.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Why Choose Us?",
+                  "Changes to this Policy:",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "We don’t just build apps or websites; we create solutions that solve real business challenges. Our team is hands-on, involved in every step from planning to deployment, ensuring your project’s success. We care about your growth as much as you do.",
+                  "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.",
+                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Contact Us:",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "If you have any questions about this Privacy Policy or how we handle your data, please contact us via our Contact Us page.",
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),

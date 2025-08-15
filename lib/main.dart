@@ -1,10 +1,11 @@
+import 'package:bytesflare_infotech/View/Service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'View/About.dart';
 import 'View/Contactus.dart';
 import 'View/Info.dart';
-import 'View/Service.dart';
+import 'View/PrivacyPolicyPage.dart';
 import 'View/Welcome.dart';
 import 'View/career.dart';
 import 'firebase_options.dart';
@@ -29,12 +30,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/welcome",
       routes: {
-        "/welcome": (context) => Welcome(),
+        "/welcome": (context) => WelcomePage(),
         "/info": (context) => InfoPage(),
         "/service": (context) => ServicesPage(),
-        "/About": (context) => AboutPage(),
+        "/About": (context) => AboutUsPage(),
         "/contactus": (context) => ContactUsPage(),
         "/carriers": (context) => CareerFormPage(),
+        "/privacy-policy": (context) => PrivacyPolicyPage(),
       },
     );
   }
