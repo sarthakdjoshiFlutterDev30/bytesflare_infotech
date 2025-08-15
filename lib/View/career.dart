@@ -73,6 +73,8 @@ class _CareerFormPageState extends State<CareerFormPage> {
                   labelStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder(),
                 ),
+                dropdownColor: Color(0xFF0D1B2A),
+
                 items: _jobOptions.map((job) {
                   return DropdownMenuItem(
                     value: job,
