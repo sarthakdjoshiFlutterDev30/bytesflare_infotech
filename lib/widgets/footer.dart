@@ -21,7 +21,7 @@ class Footer extends StatelessWidget {
             spacing: 16,
             children: [
               _footerLink(context, 'Privacy Policy', '/privacy-policy'),
-              _footerLink(context, 'Contact Us', '/contact'),
+              _footerLink(context, 'Contact Us', '/contactus'),
             ],
           ),
         ],
