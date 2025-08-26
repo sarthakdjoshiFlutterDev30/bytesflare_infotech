@@ -24,7 +24,10 @@ class _CareerFormPageState extends State<CareerFormPage> {
   String? _jobDesignation;
   String? _portfolioLink;
 
-  final List<String> _jobOptions = ["Business Development Executive"];
+  final List<String> _jobOptions = [
+    "Business Development Executive",
+    "Digital Marketing Specialist",
+  ];
 
   PlatformFile? _pickedFile;
   bool _isUploading = false;
@@ -120,9 +123,14 @@ class _CareerFormPageState extends State<CareerFormPage> {
                 ),
               ),
               _jobCard(
+                "Digital Marketing Specialist",
+                "Remote",
+                "Run SEO, Google & Social Media campaigns to boost visibility and bring inbound leads.",
+              ),
+              _jobCard(
                 "Business Development Executive",
                 "Remote",
-                "Identify and convert leads into clients for IT services.",
+                "Generate leads, pitch clients, prepare proposals, and close deals for IT services.",
               ),
               TextFormField(
                 style: const TextStyle(fontSize: 18, color: Colors.white),
