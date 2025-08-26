@@ -146,18 +146,23 @@ class _CareerFormPageState extends State<CareerFormPage> {
                 keyboardType: TextInputType.number,
                 maxLength: 10,
                 decoration: const InputDecoration(
-                  labelText: "Mobile Number.",
+                  labelText: "Mobile Number",
                   prefix: Text(
                     "+91-",
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   labelStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder(),
+                  errorStyle: TextStyle(color: Colors.red, fontSize: 14),
                 ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 onSaved: (value) => _contactNo = value,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter your name";
+                    return "Please enter your Mobile No.";
+                  }
+                  if (value.length != 10) {
+                    return "Mobile Number must be exactly 10 digits";
                   }
                   return null;
                 },
