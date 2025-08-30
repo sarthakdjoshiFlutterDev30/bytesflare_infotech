@@ -30,6 +30,7 @@ class _CareerFormPageState extends State<CareerFormPage> {
   ];
 
   PlatformFile? _pickedFile;
+  PlatformFile? _pickedPhoto;
   bool _isUploading = false;
 
   Future<void> _pickFile() async {
@@ -51,7 +52,7 @@ class _CareerFormPageState extends State<CareerFormPage> {
 
       if (file.size > 1024 * 1024) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("File size must be under 1 MB")),
+          const SnackBar(content: Text("Resume size must be under 1 MB")),
         );
         return;
       }
@@ -62,11 +63,32 @@ class _CareerFormPageState extends State<CareerFormPage> {
     }
   }
 
-  Future<String?> _uploadFile() async {
-    if (_pickedFile == null || _name == null || _jobDesignation == null)
-      return null;
+  Future<void> _pickPhoto() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
 
-    setState(() => _isUploading = true);
+    if (result != null) {
+      final file = result.files.first;
+
+      if (file.size > 1024 * 1024) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Photo size must be under 1 MB")),
+        );
+        return;
+      }
+
+      setState(() {
+        _pickedPhoto = file;
+      });
+    }
+  }
+
+  Future<String?> _uploadFile() async {
+    if (_pickedFile == null || _name == null || _jobDesignation == null) {
+      return null;
+    }
 
     try {
       final safeName = _name!.replaceAll(' ', '_').toUpperCase();
@@ -78,7 +100,6 @@ class _CareerFormPageState extends State<CareerFormPage> {
       );
 
       if (kIsWeb) {
-        // Web upload
         await storageRef.putData(
           _pickedFile!.bytes!,
           SettableMetadata(contentType: 'application/pdf'),
@@ -94,14 +115,46 @@ class _CareerFormPageState extends State<CareerFormPage> {
       return await storageRef.getDownloadURL();
     } catch (e) {
       if (kDebugMode) {
-        print("Upload error: $e");
+        print("Upload error (resume): $e");
       }
       return null;
-    } finally {
-      setState(() => _isUploading = false);
     }
   }
 
+  Future<String?> _uploadPhoto() async {
+    if (_pickedPhoto == null || _name == null) return null;
+
+    try {
+      final safeName = _name!.replaceAll(' ', '_').toUpperCase();
+      final fileName = "PHOTO_$safeName.png";
+
+      final storageRef = FirebaseStorage.instance.ref().child(
+        "photos/$fileName",
+      );
+
+      if (kIsWeb) {
+        await storageRef.putData(
+          _pickedPhoto!.bytes!,
+          SettableMetadata(contentType: 'image/png'),
+        );
+      } else {
+        final file = File(_pickedPhoto!.path!);
+        await storageRef.putFile(
+          file,
+          SettableMetadata(contentType: 'image/png'),
+        );
+      }
+
+      return await storageRef.getDownloadURL();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Upload error (photo): $e");
+      }
+      return null;
+    }
+  }
+
+  // ------------------ UI -------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +185,8 @@ class _CareerFormPageState extends State<CareerFormPage> {
                 "Remote",
                 "Generate leads, pitch clients, prepare proposals, and close deals for IT services.",
               ),
+
+              // ------------------ FORM FIELDS -------------------
               TextFormField(
                 style: const TextStyle(fontSize: 18, color: Colors.white),
                 decoration: const InputDecoration(
@@ -212,19 +267,31 @@ class _CareerFormPageState extends State<CareerFormPage> {
               ),
               const SizedBox(height: 20),
 
-              // Resume Upload Button
+              // ------------------ UPLOAD RESUME -------------------
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
                 onPressed: _pickFile,
                 icon: const Icon(Icons.upload_file, color: Colors.white),
                 label: Text(
                   _pickedFile == null
-                      ? "Upload Resume (Max 1MB)"
+                      ? "Upload Resume (PDF, Max 1MB)"
                       : "File Selected: ${_pickedFile!.name}",
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 20),
 
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                onPressed: _pickPhoto,
+                icon: const Icon(Icons.photo_camera, color: Colors.white),
+                label: Text(
+                  _pickedPhoto == null
+                      ? "Upload Photo (JPG/PNG, Max 1MB)"
+                      : "Photo Selected: ${_pickedPhoto!.name}",
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
               const SizedBox(height: 30),
               _isUploading
                   ? const Center(child: CircularProgressIndicator())
@@ -245,12 +312,15 @@ class _CareerFormPageState extends State<CareerFormPage> {
                           }
 
                           _formKey.currentState!.save();
+                          setState(() => _isUploading = true);
 
                           final resumeUrl = await _uploadFile();
-                          if (resumeUrl == null) return;
+                          final photoUrl = await _uploadPhoto();
+
                           final formattedDate = DateFormat(
                             'dd-MM-yyyy',
                           ).format(DateTime.now());
+
                           await FirebaseFirestore.instance
                               .collection('Carriers')
                               .add({
@@ -259,8 +329,11 @@ class _CareerFormPageState extends State<CareerFormPage> {
                                 "portfolioLink": _portfolioLink,
                                 "mobileNo": _contactNo,
                                 "resumeUrl": resumeUrl,
+                                "photoUrl": photoUrl,
                                 "appliedDate": formattedDate,
                               });
+
+                          setState(() => _isUploading = false);
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -271,7 +344,10 @@ class _CareerFormPageState extends State<CareerFormPage> {
                           );
 
                           _formKey.currentState!.reset();
-                          setState(() => _pickedFile = null);
+                          setState(() {
+                            _pickedFile = null;
+                            _pickedPhoto = null;
+                          });
                         }
                       },
                       child: const Text(
@@ -279,6 +355,7 @@ class _CareerFormPageState extends State<CareerFormPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
+
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Footer(),
             ],
