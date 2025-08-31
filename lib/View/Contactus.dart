@@ -42,65 +42,38 @@ class _ContactUsPageState extends State<ContactUsPage> {
     }
   }
 
-  void _navigateTo(String value) {
-    switch (value) {
-      case 'Home':
-        Navigator.pushNamed(context, "/welcome");
-        break;
-      case 'Services':
-        Navigator.pushNamed(context, "/service");
-        break;
-      case 'Info':
-        Navigator.pushNamed(context, "/info");
-        break;
-      case 'About':
-        Navigator.pushNamed(context, "/About");
-        break;
-      case 'ContactUs':
-        Navigator.pushNamed(context, "/contactus");
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E2A32),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1E2A32),
-        elevation: 0,
-        title: Header(),
-      ),
+      appBar: AppBar(title: const Header()),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
+            constraints: const BoxConstraints(maxWidth: 800),
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'We would love to hear from you!',
-                    style: TextStyle(
-                      fontSize: 28,
+                  Text(
+                    "Contact Us",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Have a question or a project in mind? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 40),
                   TextFormField(
                     controller: _nameController,
-                    style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
-                      labelText: 'Name',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      filled: true,
-                      fillColor: Color(0xFF2A3A47),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person, color: Colors.white70),
+                      labelText: "Your Name",
+                      hintText: "Enter your full name",
                     ),
                     validator: (value) => value == null || value.isEmpty
                         ? 'Please enter your name'
@@ -109,21 +82,15 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _emailController,
-                    style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
-                      labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      filled: true,
-                      fillColor: Color(0xFF2A3A47),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email, color: Colors.white70),
+                      labelText: "Your Email",
+                      hintText: "Enter your email address",
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      } else if (!RegExp(
-                        r'^[^@]+@[^@]+\.[^@]+',
-                      ).hasMatch(value)) {
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                         return 'Please enter a valid email address';
                       }
                       return null;
@@ -132,15 +99,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _messageController,
-                    maxLines: 6,
-                    style: const TextStyle(color: Colors.white),
+                    maxLines: 5,
                     decoration: const InputDecoration(
-                      labelText: 'Message',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      filled: true,
-                      fillColor: Color(0xFF2A3A47),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.message, color: Colors.white70),
+                      labelText: "Your Message",
+                      hintText: "Tell us about your project or inquiry",
                       alignLabelWithHint: true,
                     ),
                     validator: (value) => value == null || value.isEmpty
@@ -162,17 +124,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               ),
                             )
                           : const Icon(Icons.send),
-                      label: Text(
-                        _isLoading ? "Sending..." : "Submit",
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      label: Text(_isLoading ? "Sending..." : "Submit"),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                     ),
                   ),
                   const SizedBox(height: 50),
-                  Footer(),
+                  const Footer(),
                 ],
               ),
             ),

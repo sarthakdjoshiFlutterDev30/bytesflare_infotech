@@ -123,7 +123,6 @@ class _CareerFormPageState extends State<CareerFormPage> {
 
   Future<String?> _uploadPhoto() async {
     if (_pickedPhoto == null || _name == null) return null;
-
     try {
       final safeName = _name!.replaceAll(' ', '_').toUpperCase();
       final fileName = "PHOTO_$safeName.png";
@@ -154,223 +153,130 @@ class _CareerFormPageState extends State<CareerFormPage> {
     }
   }
 
-  // ------------------ UI -------------------
+  Future<void> _submitCareerForm() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
+
+    if (_pickedFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please upload your resume")),
+      );
+      return;
+    }
+
+    setState(() => _isUploading = true);
+    final resumeUrl = await _uploadFile();
+    final photoUrl = await _uploadPhoto();
+
+    if (resumeUrl == null) {
+      setState(() => _isUploading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Failed to upload resume. Please try again."),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+      await FirebaseFirestore.instance.collection('Carriers').add({
+        "name": _name?.toUpperCase().toString(),
+        "jobDesignation": _jobDesignation,
+        "portfolioLink": _portfolioLink,
+        "mobileNo": _contactNo,
+        "resumeUrl": resumeUrl,
+        "photoUrl": photoUrl,
+        "appliedDate": formattedDate,
+      });
+      _formKey.currentState!.reset();
+      setState(() {
+        _pickedFile = null;
+        _pickedPhoto = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Application submitted successfully!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error submitting application: $e")),
+      );
+    } finally {
+      setState(() => _isUploading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Header()),
-      backgroundColor: const Color(0xFF1E2A32),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              Text(
-                "Available Opening",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              _jobCard(
-                "Digital Marketing Specialist",
-                "Remote",
-                "Run SEO, Google & Social Media campaigns to boost visibility and bring inbound leads.",
-              ),
-              _jobCard(
-                "Business Development Executive",
-                "Remote",
-                "Generate leads, pitch clients, prepare proposals, and close deals for IT services.",
-              ),
-
-              // ------------------ FORM FIELDS -------------------
-              TextFormField(
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-                decoration: const InputDecoration(
-                  labelText: "Full Name",
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (value) => _name = value,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter your name";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                decoration: const InputDecoration(
-                  labelText: "Mobile Number",
-                  prefix: Text(
-                    "+91-",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+      appBar: AppBar(title: const Header()),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Career Opportunities",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                  errorStyle: TextStyle(color: Colors.red, fontSize: 14),
-                ),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onSaved: (value) => _contactNo = value,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter your Mobile No.";
-                  }
-                  if (value.length != 10) {
-                    return "Mobile Number must be exactly 10 digits";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: "Job Designation",
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                ),
-                dropdownColor: const Color(0xFF0D1B2A),
-                items: _jobOptions.map((job) {
-                  return DropdownMenuItem(
-                    value: job,
-                    child: Text(
-                      job,
-                      style: const TextStyle(color: Colors.white),
+                  const SizedBox(height: 20),
+                  _buildAvailableOpenings(context),
+                  const SizedBox(height: 40),
+                  Text(
+                    "Apply Now",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                }).toList(),
-                onChanged: (value) => setState(() => _jobDesignation = value),
-                validator: (value) {
-                  if (value == null) {
-                    return "Please select a job designation";
-                  }
-                  return null;
-                },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildApplicationForm(),
+                  const SizedBox(height: 50),
+                  const Footer(),
+                ],
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-                decoration: const InputDecoration(
-                  labelText: "Enter Portfolio/Github Link (Optional)",
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (value) => _portfolioLink = value,
-              ),
-              const SizedBox(height: 20),
-
-              // ------------------ UPLOAD RESUME -------------------
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-                onPressed: _pickFile,
-                icon: const Icon(Icons.upload_file, color: Colors.white),
-                label: Text(
-                  _pickedFile == null
-                      ? "Upload Resume (PDF, Max 1MB)"
-                      : "File Selected: ${_pickedFile!.name}",
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                onPressed: _pickPhoto,
-                icon: const Icon(Icons.photo_camera, color: Colors.white),
-                label: Text(
-                  _pickedPhoto == null
-                      ? "Upload Photo (JPG/PNG, Max 1MB)"
-                      : "Photo Selected: ${_pickedPhoto!.name}",
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 30),
-              _isUploading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurple,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (_pickedFile == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please upload your resume"),
-                              ),
-                            );
-                            return;
-                          }
-
-                          _formKey.currentState!.save();
-                          setState(() => _isUploading = true);
-
-                          final resumeUrl = await _uploadFile();
-                          final photoUrl = await _uploadPhoto();
-
-                          final formattedDate = DateFormat(
-                            'dd-MM-yyyy',
-                          ).format(DateTime.now());
-
-                          await FirebaseFirestore.instance
-                              .collection('Carriers')
-                              .add({
-                                "name": _name?.toUpperCase().toString(),
-                                "jobDesignation": _jobDesignation,
-                                "portfolioLink": _portfolioLink,
-                                "mobileNo": _contactNo,
-                                "resumeUrl": resumeUrl,
-                                "photoUrl": photoUrl,
-                                "appliedDate": formattedDate,
-                              });
-
-                          setState(() => _isUploading = false);
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Application submitted for $_jobDesignation",
-                              ),
-                            ),
-                          );
-
-                          _formKey.currentState!.reset();
-                          setState(() {
-                            _pickedFile = null;
-                            _pickedPhoto = null;
-                          });
-                        }
-                      },
-                      child: const Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Footer(),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _jobCard(String title, String location, String description) {
+  Widget _buildAvailableOpenings(BuildContext context) {
+    return Column(
+      children: [
+        _jobCard(
+          context,
+          "Digital Marketing Specialist",
+          "Remote",
+          "Run engaging campaigns and analyze performance to drive business growth.",
+        ),
+        _jobCard(
+          context,
+          "Business Development Executive",
+          "Remote",
+          "Develop new business opportunities and build strong client relationships.",
+        ),
+      ],
+    );
+  }
+
+  Widget _jobCard(
+    BuildContext context,
+    String title,
+    String location,
+    String description,
+  ) {
     return Card(
-      color: const Color(0xFF1E2A32),
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -378,25 +284,118 @@ class _CareerFormPageState extends State<CareerFormPage> {
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
-            Text(
-              location,
-              style: const TextStyle(fontSize: 14, color: Colors.white),
-            ),
+            Text(location, style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 10),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 15, color: Colors.white),
-            ),
+            Text(description, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildApplicationForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Full Name",
+              hintText: "Enter your full name",
+            ),
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please enter your name'
+                : null,
+            onSaved: (value) => _name = value,
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            maxLength: 10,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: const InputDecoration(
+              labelText: "Contact No",
+              hintText: "Enter your contact number",
+            ),
+            keyboardType: TextInputType.phone,
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please enter your contact number'
+                : null,
+            onSaved: (value) => _contactNo = value,
+          ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField(
+            value: _jobDesignation,
+            decoration: const InputDecoration(labelText: "Job Designation"),
+            items: _jobOptions.map((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _jobDesignation = newValue;
+              });
+            },
+            validator: (value) =>
+                value == null ? 'Please select a job designation' : null,
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Portfolio Link (Optional)",
+              hintText: "Enter a link to your portfolio",
+            ),
+            keyboardType: TextInputType.url,
+            onSaved: (value) => _portfolioLink = value,
+          ),
+          const SizedBox(height: 20),
+          _buildFilePickerField(
+            title: "Upload Resume (PDF only)",
+            onTap: _pickFile,
+            pickedFile: _pickedFile,
+          ),
+          const SizedBox(height: 20),
+          _buildFilePickerField(
+            title: "Upload Photo (JPG/PNG only)",
+            onTap: _pickPhoto,
+            pickedFile: _pickedPhoto,
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _isUploading ? null : _submitCareerForm,
+              child: _isUploading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text("Submit"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilePickerField({
+    required String title,
+    required VoidCallback onTap,
+    required PlatformFile? pickedFile,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: onTap,
+          icon: const Icon(Icons.file_upload),
+          label: Text(pickedFile != null ? pickedFile.name : "Choose File"),
+        ),
+      ],
     );
   }
 }

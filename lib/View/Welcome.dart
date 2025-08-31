@@ -8,58 +8,72 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Header()),
-      backgroundColor: const Color(0xFF1E2A32), // Dark blue background
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Top Navigation Menu
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Welcome to BytesFlare Infotech",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Innovative digital solutions to empower your business.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 18),
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+      appBar: AppBar(title: const Header()),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF1E2A32), Color(0xFF2E404E)],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildAnimatedText(
+                        "Welcome to BytesFlare Infotech",
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.popAndPushNamed(context, "/service");
-                    },
-                    child: const Text(
-                      "Get Started",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                      const SizedBox(height: 16),
+                      _buildAnimatedText(
+                        "Innovative digital solutions to empower your business.",
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(color: Colors.white70),
+                        delay: const Duration(milliseconds: 500),
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/service");
+                        },
+                        child: const Text("Get Started"),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-
-          // Footer
-          Footer(),
-        ],
+            const Footer(),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildAnimatedText(
+    String text, {
+    TextStyle? style,
+    Duration delay = Duration.zero,
+  }) {
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: AlwaysStoppedAnimation(
+          1,
+        ), // A simple way to get a value for transition
+        curve: Curves.easeIn,
+      ),
+      child: Text(text, textAlign: TextAlign.center, style: style),
     );
   }
 }

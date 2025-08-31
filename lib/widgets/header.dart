@@ -9,72 +9,78 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
     bool isMobile = MediaQuery.of(context).size.width < 800;
 
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF1E2A32),
       elevation: 4,
       toolbarHeight: height,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () => Navigator.pushReplacementNamed(context, '/welcome'),
-            child: Row(
-              children: [
-                Image.asset('assets/image/logo.png', width: 40, height: 40),
-                const SizedBox(width: 8),
-                Text(
-                  "BytesFlare Infotech",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[800],
+      title: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () => Navigator.pushReplacementNamed(context, '/welcome'),
+              child: Row(
+                children: [
+                  Image.asset('assets/image/logo.png', width: 40, height: 40),
+                  const SizedBox(width: 8),
+                  Text(
+                    "BytesFlare Infotech",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[800],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          if (!isMobile)
-            Row(
-              children: _navItems(context).map((item) {
-                return _buildHoverButton(
-                  context,
-                  item['label']!,
-                  item['route']!,
-                );
-              }).toList(),
-            ),
-          if (isMobile)
-            IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black87),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      color: Colors.white,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: _navItems(context).map((item) {
-                          return ListTile(
-                            title: Text(
-                              item['label']!,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            onTap: () {
-                              Navigator.pop(context); // close sheet
-                              Navigator.pushReplacementNamed(
-                                context,
-                                item['route']!,
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-        ],
+            if (!isMobile)
+              Row(
+                children: _navItems(context).map((item) {
+                  return _buildHoverButton(
+                    context,
+                    item['label']!,
+                    item['route']!,
+                  );
+                }).toList(),
+              ),
+            if (isMobile)
+              IconButton(
+                icon: const Icon(Icons.menu, color: Colors.black87),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.black26,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: _navItems(context).map((item) {
+                            return ListTile(
+                              title: Text(
+                                item['label']!,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.pop(context); // close sheet
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  item['route']!,
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -100,7 +106,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () => Navigator.pushReplacementNamed(context, route),
           child: Text(
             text,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ),
       ),

@@ -8,12 +8,8 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E2A32),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1E2A32),
-        elevation: 0,
-        title: const Header(),
-      ),
+      appBar: AppBar(title: const Header()),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: Center(
@@ -24,98 +20,53 @@ class AboutUsPage extends StatelessWidget {
               children: [
                 Text(
                   "About Us",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Bytes Flare Infotech is a specialized IT agency dedicated to helping businesses succeed in the digital world. Since our inception, we have focused on delivering high-quality mobile apps, websites, and custom software solutions tailored to our clients' unique needs.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Our Mission",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "Our mission is to empower businesses by providing innovative digital solutions that enhance customer engagement, streamline operations, and drive growth. We combine creativity with technology to deliver products that stand out in the market.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  "Our Vision",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  "What We Do",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "We envision becoming a leading digital solutions provider known for transforming ideas into successful products. Our goal is to create long-term partnerships with businesses by consistently delivering exceptional results.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  "We specialize in:\n- Mobile App Development (Android & iOS)\n- Web Development & Design\n- Custom Software Solutions\n- E-Commerce Platforms\n- UI/UX Design & Animation\n- Cloud & Backend Integration",
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
-                Text(
-                  "Our Values",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "1. Quality: We are committed to delivering high-quality solutions that exceed client expectations.\n\n"
-                  "2. Innovation: We embrace new technologies and creative ideas to provide cutting-edge solutions.\n\n"
-                  "3. Integrity: We maintain transparency and honesty in all our client interactions.\n\n"
-                  "4. Collaboration: We work closely with clients, understanding their needs to achieve shared success.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Our Expertise",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "We specialize in:\n"
-                  "- Mobile App Development (Android & iOS)\n"
-                  "- Web Development & Design\n"
-                  "- Custom Software Solutions\n"
-                  "- E-Commerce Platforms\n"
-                  "- UI/UX Design & Animation\n"
-                  "- Cloud & Backend Integration",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
-                ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Why Choose Us?",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "We don’t just build apps or websites; we create solutions that solve real business challenges. Our team is hands-on, involved in every step from planning to deployment, ensuring your project’s success. We care about your growth as much as you do.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                Center(child: Footer()),
+                const Center(child: Footer()),
               ],
             ),
           ),
