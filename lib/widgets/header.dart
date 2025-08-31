@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../ThemeProvider.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -7,9 +10,10 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 800;
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return AppBar(
-      backgroundColor: Color(0xFF1E2A32),
+      backgroundColor: const Color(0xFF1E2A32),
       elevation: 4,
       toolbarHeight: height,
       title: SizedBox(
@@ -17,6 +21,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            /// ✅ Left logo + title
             InkWell(
               onTap: () => Navigator.pushReplacementNamed(context, '/welcome'),
               child: Row(
@@ -34,50 +39,87 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
             ),
+
+            /// ✅ Desktop Nav + Theme button
             if (!isMobile)
               Row(
-                children: _navItems(context).map((item) {
-                  return _buildHoverButton(
-                    context,
-                    item['label']!,
-                    item['route']!,
-                  );
-                }).toList(),
+                children: [
+                  ..._navItems(context).map((item) {
+                    return _buildHoverButton(
+                      context,
+                      item['label']!,
+                      item['route']!,
+                    );
+                  }).toList(),
+
+                  /// 🔘 Theme toggle button
+                  IconButton(
+                    icon: Icon(
+                      themeProvider.themeMode == ThemeMode.light
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                  ),
+                ],
               ),
+
+            /// ✅ Mobile: Theme toggle + menu
             if (isMobile)
-              IconButton(
-                icon: const Icon(Icons.menu, color: Colors.black87),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        color: Colors.black26,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: _navItems(context).map((item) {
-                            return ListTile(
-                              title: Text(
-                                item['label']!,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.pop(context); // close sheet
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  item['route']!,
+              Row(
+                children: [
+                  /// 🔘 Theme button for mobile
+                  IconButton(
+                    icon: Icon(
+                      themeProvider.themeMode == ThemeMode.light
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                  ),
+
+                  /// 📱 Mobile menu button
+                  IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            color: Colors.black87,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: _navItems(context).map((item) {
+                                return ListTile(
+                                  title: Text(
+                                    item['label']!,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      item['route']!,
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          }).toList(),
-                        ),
+                              }).toList(),
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+                ],
               ),
           ],
         ),
@@ -85,7 +127,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Updated to match your provided route names
+  // ✅ Nav items
   List<Map<String, String>> _navItems(BuildContext context) {
     return [
       {'label': 'Home', 'route': '/welcome'},
