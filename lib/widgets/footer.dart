@@ -28,7 +28,7 @@ class Footer extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _socialMediaLinks(),
+          _socialMediaLinks(context),
         ],
       ),
     );
@@ -44,26 +44,38 @@ class Footer extends StatelessWidget {
     );
   }
 
-  Widget _socialMediaLinks() {
+  Widget _socialMediaLinks(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.facebook, color: Colors.white70),
+          icon: FaIcon(
+            FontAwesomeIcons.facebook,
+            //, color: Colors.white70
+          ),
           onPressed: () async {
             await launchUrl(
               Uri.parse('https://facebook.com/BytesFlareInfotech'),
             );
           },
         ),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.x, color: Colors.white70),
+          icon: FaIcon(
+            FontAwesomeIcons.x,
+            //color: Colors.white70
+          ),
           onPressed: () async {
             await launchUrl(Uri.parse('https://x.com/BytesF99635'));
           },
         ),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.instagram, color: Colors.white70),
+          icon: FaIcon(
+            FontAwesomeIcons.instagram,
+            //, color: Colors.white70
+          ),
           onPressed: () async {
             await launchUrl(
               Uri.parse('https://www.instagram.com/bytesflareinfotech/'),
