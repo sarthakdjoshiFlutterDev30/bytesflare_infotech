@@ -244,7 +244,6 @@ class _CareerFormPageState extends State<CareerFormPage> {
                                 "name": _name?.toUpperCase().toString(),
                                 "jobDesignation": _jobDesignation,
                                 "portfolioLink": _portfolioLink,
-                                "mobileNo": _contactNo,
                                 "resumeUrl": resumeUrl,
                                 "appliedDate": formattedDate,
                               });
