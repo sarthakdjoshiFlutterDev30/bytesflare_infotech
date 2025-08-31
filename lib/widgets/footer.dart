@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart'; // Add url_launcher to your pubspec.yaml
 
 class Footer extends StatelessWidget {
@@ -48,16 +49,25 @@ class Footer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: const Icon(Icons.facebook, color: Colors.white70),
+          icon: FaIcon(FontAwesomeIcons.facebook, color: Colors.white70),
           onPressed: () async {
-            await launchUrl(Uri.parse('https://www.facebook.com/'));
+            await launchUrl(
+              Uri.parse('https://facebook.com/BytesFlareInfotech'),
+            );
           },
         ),
         IconButton(
-          icon: const Icon(Icons.share, color: Colors.white70),
+          icon: FaIcon(FontAwesomeIcons.x, color: Colors.white70),
           onPressed: () async {
-            // Replace with your Twitter/X profile URL
-            await launchUrl(Uri.parse('https://www.twitter.com/'));
+            await launchUrl(Uri.parse('https://x.com/BytesF99635'));
+          },
+        ),
+        IconButton(
+          icon: FaIcon(FontAwesomeIcons.instagram, color: Colors.white70),
+          onPressed: () async {
+            await launchUrl(
+              Uri.parse('https://www.instagram.com/bytesflareinfotech/'),
+            );
           },
         ),
       ],
