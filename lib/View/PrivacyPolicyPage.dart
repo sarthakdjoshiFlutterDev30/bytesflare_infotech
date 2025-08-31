@@ -8,12 +8,8 @@ class PrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E2A32),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1E2A32),
-        elevation: 0,
-        title: const Header(),
-      ),
+      appBar: AppBar(title: const Header()),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: Center(
@@ -24,103 +20,89 @@ class PrivacyPolicyPage extends StatelessWidget {
               children: [
                 Text(
                   "Privacy Policy",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you visit or use our services.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Information Collection:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "We may collect personal information such as your name, email address, and any other details you provide when using our services or contacting us.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  "Information Use:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  "How We Use Your Information:",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "The information collected is used to respond to your inquiries, improve our services, and provide a better user experience. We do not share your personal data with third parties without your consent.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  "We use the information we collect to respond to your inquiries, provide our services, and improve our website and services. We do not sell or share your personal information with third parties for their marketing purposes.",
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
-                Text(
-                  "Cookies and Tracking:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "We may use cookies and similar technologies to analyze site usage and improve performance. You can manage your cookie preferences in your browser settings.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
-                ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Data Security:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  "We implement appropriate security measures to protect your personal information from unauthorized access, disclosure, or misuse.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  "We implement a variety of security measures to protect your personal information from unauthorized access, use, or disclosure. However, no data transmission over the internet or any wireless network can be guaranteed to be 100% secure.",
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
+                Text(
+                  "Cookies:",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Our website may use 'cookies' to enhance the user experience. You can choose to set your web browser to refuse cookies or to alert you when cookies are being sent.",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 20),
                 Text(
                   "Changes to this Policy:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Contact Us:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "If you have any questions about this Privacy Policy or how we handle your data, please contact us via our Contact Us page.",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                Center(child: Footer()),
+                const Center(child: Footer()),
               ],
             ),
           ),
